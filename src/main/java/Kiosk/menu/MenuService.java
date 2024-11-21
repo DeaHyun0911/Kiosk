@@ -1,9 +1,11 @@
 package Kiosk.menu;
 
+import java.util.List;
+
 public interface MenuService {
 
-    void findByCategory();
 
-    void findByMenu();
+    List<MenuItem> findByCategoryMenu(Category category);
 
+    MenuItem findByMenu(Category categoryNumber, int menuNumber);
 }

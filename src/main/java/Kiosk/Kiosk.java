@@ -1,12 +1,26 @@
 package Kiosk;
 
+import Kiosk.menu.Category;
+
 public interface Kiosk {
+
+    boolean onOff = true;
 
     void start();
 
-    void nextMenu();
+    void categoryMenu();
 
-    void prevMenu();
+    void itemMenu(int categoryNumber);
 
-    void exit(int menuNumber);
+    void selectMenu(int categoryNumber, int select);
+
+    void exit();
+
+    Category intToCategory(int categoryNumber);
+
+    boolean getOnOff();
+
+    void setOnOff(boolean onOff);
+
+
 }

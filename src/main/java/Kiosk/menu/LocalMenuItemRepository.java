@@ -3,10 +3,11 @@ package Kiosk.menu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocalMenuItemRepository implements MenuItemRepository {
 
-    private static List<MenuItem> menu = new ArrayList<>(List.of(
+    private List<MenuItem> menu = new ArrayList<>(List.of(
             new MenuItem(1L, Category.BURGERS, 1, "싸이버거", 6000, "바삭하고 매콤한 치킨 패티와 신선한 양상추가 조화를 이루는 시그니처 버거"),
             new MenuItem(2L, Category.BURGERS, 2, "딥치즈버거", 8000, "부드러운 치즈와 한층 더 촉촉해진 통가슴살 패티가 일품인 버거"),
             new MenuItem(3L, Category.BURGERS, 3, "불고기버거", 9000, "영양 만점 불고기 패티에 고소한 불고기 소소를 더해 한층 더 맛있는 버거"),
@@ -22,8 +23,19 @@ public class LocalMenuItemRepository implements MenuItemRepository {
             new MenuItem(11L, Category.SIDES,4, "치즈스틱", 2000, "고단백 영양 만점의 모짜렐라 치즈스틱")
     ));
 
+    // 카테고리, 카테고리별 id값으로 선택한 메뉴 필터링
     @Override
-    public MenuItem findById(Long menuId) {
-        return null;
+    public MenuItem findByMenu(Category category, int selectId) {
+        return menu.stream()
+                .filter(item -> item.getCategory() == category && item.getSelectId() == selectId)
+                .findFirst().orElseThrow();
+    }
+
+    // 카테고리별 메뉴 필터링
+    @Override
+    public List<MenuItem> findByCategory(Category category) {
+        return menu.stream()
+                .filter(item -> item.getCategory() == category)
+                .collect(Collectors.toList());
     }
 }
