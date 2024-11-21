@@ -10,8 +10,15 @@ import java.util.List;
 
 public class KioskImpl implements Kiosk {
 
+    KioskConfig kioskConfig = new KioskConfig();
     private boolean onOff = true; // 키오스크 실행 / 종료
-    MenuService menuService = new MenuServiceImpl();
+
+    // KioskImpl이 MenuService 인터페이스에 의존
+    MenuService menuService;
+    // 생성자를 통해 menuService를 주입받음
+    public KioskImpl(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     // 키오스크 실행
     @Override
