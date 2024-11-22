@@ -1,14 +1,22 @@
 package Kiosk;
 
-import Kiosk.menu.LocalMenuItemRepository;
-import Kiosk.menu.MenuService;
-import Kiosk.menu.MenuServiceImpl;
+import Kiosk.cart.Cart;
+import Kiosk.cart.CartImpl;
+import Kiosk.menu.Repository.LocalMenuItemRepository;
+import Kiosk.menu.Service.PrintService;
+import Kiosk.menu.Service.PrintServiceImpl;
+import Kiosk.menu.Service.MenuService;
+import Kiosk.menu.Service.MenuServiceImpl;
 
 public class KioskConfig {
 
-    // Kiosk에 MenuService을 주입
-    public Kiosk kiosk() {
-        return new KioskImpl(menuService());
+    public Cart cart() {
+        return new CartImpl();
+    }
+
+    // printService에 MenuService을 주입
+    public PrintService printService(Cart cart) {
+        return new PrintServiceImpl(menuService(), cart);
     }
 
     //MenuService에 LocalMenuItemRepository를 주입

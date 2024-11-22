@@ -1,4 +1,7 @@
-package Kiosk.menu;
+package Kiosk.menu.Service;
+
+import Kiosk.menu.Category;
+import Kiosk.menu.MenuItem;
 
 import java.util.List;
 
