@@ -5,16 +5,30 @@ import Kiosk.cart.CartItem;
 import java.util.List;
 
 public class Order {
+    private static int currentId = 0;
+
     private Long id;
     private List<CartItem> orderList;
     private Long totalPrice;
     private Long discountPrice;
 
-    public Order(Long id, List<CartItem> orderList, Long totalPrice, Long discountPrice) {
-        this.id = id;
+    public Order(List<CartItem> orderList) {
+        this.id = (long) generateId();
         this.orderList = orderList;
-        this.totalPrice = totalPrice;
-        this.discountPrice = discountPrice;
+        this.totalPrice = totalPrice();
+//        this.discountPrice = discountPrice;
+    }
+
+    public Long totalPrice() {
+        Long sum = 0L;
+        for(CartItem i : orderList) {
+            sum += i.getPrice();
+        }
+        return sum;
+    }
+
+    public static int generateId() {
+        return ++currentId;
     }
 
     public Long getId() {

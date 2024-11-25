@@ -1,10 +1,9 @@
 package Kiosk.menu.Service;
 
-import Kiosk.cart.CartItem;
 import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
 
-public interface PrintService {
+public interface MainService {
 
     void categoryMenu();
 

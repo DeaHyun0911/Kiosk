@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MenuServiceImpl implements MenuService {
-    KioskConfig kioskConfig = new KioskConfig();
-
     private final MenuItemRepository menuItemRepository; // MenuServiceImpl이 MenuItemRepository 인터페이스에 의존
 
     public MenuServiceImpl(MenuItemRepository menuItemRepository) { // 생성자를 통해 menuItemRepository를 주입받음
@@ -28,6 +26,7 @@ public class MenuServiceImpl implements MenuService {
     // 선택한 메뉴 리스트 반한
     @Override
     public MenuItem findByMenu(Category categoryNumber, int menuNumber) {
+
         return findByCategoryMenu(categoryNumber).get(menuNumber - 1);
     }
 

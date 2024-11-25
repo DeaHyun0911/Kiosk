@@ -5,7 +5,7 @@ import Kiosk.menu.MenuItem;
 
 import java.util.List;
 
-public interface Cart {
+public interface CartService {
 
     CartItem getCartItem(MenuItem item, String quantity);
 
@@ -20,4 +20,6 @@ public interface Cart {
     void cartMenu();
 
     void totalPrice();
+
+    void cartClear();
 }
