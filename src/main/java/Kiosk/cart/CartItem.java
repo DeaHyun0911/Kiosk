@@ -11,7 +11,7 @@ public class CartItem {
     public CartItem(String name, int quantity, int price) {
         this.name = name;
         this.quantity = quantity;
-        this.price = price;
+        this.price = price * quantity;
     }
 
     public String getName() {

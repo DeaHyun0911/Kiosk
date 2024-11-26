@@ -4,15 +4,17 @@ import Kiosk.KioskConfig;
 import Kiosk.cart.CartService;
 import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
+import Kiosk.menu.Repository.MenuItemRepository;
 
 import java.util.List;
 
 public class MainServiceImpl implements MainService {
-    private final MenuService menuService;
+
+    private final MenuItemRepository menuItemRepository;
     private final CartService cartService;
 
-    public MainServiceImpl(MenuService menuService, CartService cartService) {     // 생성자를 통해 menuService를 주입받음
-        this.menuService = menuService;
+    public MainServiceImpl(MenuItemRepository menuItemRepository, CartService cartService) {     // 생성자를 통해 menuService를 주입받음
+        this.menuItemRepository = menuItemRepository;
         this.cartService = cartService;
     }
 
@@ -33,22 +35,25 @@ public class MainServiceImpl implements MainService {
 
     // 세부 메뉴 출력
     @Override
-    public void itemMenu(String categoryNumber) {
+    public int itemMenu(String categoryNumber) {
         Category category = intToCategory(Integer.parseInt(categoryNumber));
-        List<MenuItem> itemMenu = menuService.findByCategoryMenu(category);
+        List<MenuItem> itemMenu = menuItemRepository.findByCategoryMenu(category);
         System.out.println("");
         System.out.println("\033[38;5;214m[ " + category + " MENU ]\033[0m");
         for(int i = 0; i < itemMenu.size(); i++) {
             System.out.println("\u001B[36m" + (i+1) + "\u001B[0m. " + itemMenu.get(i).getName() + " | " + itemMenu.get(i).getPrice() + "원 " + " | " + itemMenu.get(i).getDescription());
         }
         System.out.println("\u001B[36m0.\u001B[0m 뒤로가기");
+
+        return itemMenu.size();
     }
+
 
     // 선택한 메뉴 출력
     @Override
     public MenuItem selectMenu(String categoryNumber, String select) {
         Category category = intToCategory(Integer.parseInt(categoryNumber));
-        MenuItem selectMenu = menuService.findByMenu(category, Integer.parseInt(select));
+        MenuItem selectMenu = menuItemRepository.findByMenu(category, Integer.parseInt(select));
         System.out.println();
         System.out.println("\u001B[36m선택한 메뉴\u001B[0m: " + selectMenu.getName() + " | " + selectMenu.getPrice() + "원" + " | " + selectMenu.getDescription());
         return selectMenu;

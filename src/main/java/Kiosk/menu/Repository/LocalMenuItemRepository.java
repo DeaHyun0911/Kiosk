@@ -6,6 +6,7 @@ import Kiosk.menu.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocalMenuItemRepository implements MenuItemRepository {
 
@@ -28,5 +29,15 @@ public class LocalMenuItemRepository implements MenuItemRepository {
     @Override
     public List<MenuItem> findAll() {
         return new ArrayList<>(menu);
+    }
+
+    public List<MenuItem> findByCategoryMenu(Category category) {
+        return menu.stream()
+                .filter(item -> item.getCategory() == category)
+                .collect(Collectors.toList());
+    }
+
+    public MenuItem findByMenu(Category categoryNumber, int menuNumber) {
+        return findByCategoryMenu(categoryNumber).get(menuNumber - 1);
     }
 }

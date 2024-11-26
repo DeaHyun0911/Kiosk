@@ -3,18 +3,17 @@ package Kiosk;
 import Kiosk.cart.CartService;
 import Kiosk.cart.CartServiceImpl;
 import Kiosk.menu.Repository.LocalMenuItemRepository;
+import Kiosk.menu.Repository.MenuItemRepository;
 import Kiosk.menu.Service.MainService;
 import Kiosk.menu.Service.MainServiceImpl;
-import Kiosk.menu.Service.MenuService;
-import Kiosk.menu.Service.MenuServiceImpl;
-import Kiosk.order.LocalOrderRepository;
-import Kiosk.order.OrderService;
-import Kiosk.order.OrderServiceImpl;
+import Kiosk.order.repository.LocalOrderRepository;
+import Kiosk.order.service.OrderService;
+import Kiosk.order.service.OrderServiceImpl;
 
 public class KioskConfig {
 
     private CartService cartService;
-    private MenuService menuService;
+    private MenuItemRepository menuItemRepository;
     private MainService mainService;
     private OrderService orderService;
 
@@ -25,13 +24,8 @@ public class KioskConfig {
         return cartService;
     }
 
-
-    public MenuService menuService() {
-        return menuService = new MenuServiceImpl(new LocalMenuItemRepository());
-    }
-
     public MainService mainService() {
-        return mainService = new MainServiceImpl(menuService(), cartService());
+        return mainService = new MainServiceImpl(new LocalMenuItemRepository(), cartService());
     }
 
     public OrderService orderService() {

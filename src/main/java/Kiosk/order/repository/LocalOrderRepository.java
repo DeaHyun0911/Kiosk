@@ -1,6 +1,7 @@
-package Kiosk.order;
+package Kiosk.order.repository;
 
 import Kiosk.menu.MenuItem;
+import Kiosk.order.Order;
 
 import java.util.ArrayList;
 import java.util.List;

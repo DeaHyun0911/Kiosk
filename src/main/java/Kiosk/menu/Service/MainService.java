@@ -7,7 +7,7 @@ public interface MainService {
 
     void categoryMenu();
 
-    void itemMenu(String categoryNumber);
+    int itemMenu(String categoryNumber);
 
     MenuItem selectMenu(String categoryNumber, String select);
 

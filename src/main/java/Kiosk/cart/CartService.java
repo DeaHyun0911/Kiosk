@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CartService {
 
-    CartItem getCartItem(MenuItem item, String quantity);
+    CartItem getCartItem(MenuItem item, int quantity);
 
     void addCart(CartItem item);
 
@@ -16,8 +16,6 @@ public interface CartService {
     List<CartItem> getCart();
 
     void cartList();
-
-    void cartMenu();
 
     void totalPrice();
 
