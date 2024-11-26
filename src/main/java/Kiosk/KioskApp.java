@@ -128,7 +128,7 @@ public class KioskApp {
         System.out.println();
         System.out.println("\033[38;5;214m[ CART MENU ]\033[0m");
         cartService.cartList();
-        cartService.totalPrice();
+        System.out.println("합계: " + "\u001B[36m" + cartService.totalPrice() + "\u001B[0m" + "원");
         System.out.println("\u001B[36m1\u001B[0m. 삭제하기    \u001B[36m2\u001B[0m. 비우기    \u001B[36m3\u001B[0m. 메인으로 돌아가기");
         String select = Input("메뉴 번호를 입력하세요: ");
         switch (select) {
@@ -163,7 +163,7 @@ public class KioskApp {
         System.out.println();
         System.out.println("\033[38;5;214m[ ORDERS ]\033[0m");
         cartService.cartList();
-        cartService.totalPrice();
+        System.out.println("합계: " + "\u001B[36m" + cartService.totalPrice() + "\u001B[0m" + "원");
         System.out.println("\u001B[36m1\u001B[0m. 결제하기    \u001B[36m2\u001B[0m. 취소");
         String select = Input("메뉴 번호를 입력하세요: ");
         switch (select) {
@@ -236,12 +236,12 @@ public class KioskApp {
         System.out.println("\033[1;34m+----------------------------------+\033[0m");
         System.out.println(String.format("%-15s %5s %10s", "상품명", "수량", "가격"));
         order.getOrderList().forEach(item ->
-                System.out.println(String.format("%-15s %5s %10s", item.getName(), item.getQuantity(), item.getPrice()))
+                System.out.printf("%-15s %5s %10s%n", item.getName(), item.getQuantity(), item.getPrice())
         );
         System.out.println("\033[1;34m+----------------------------------+\033[0m");
-        System.out.println(String.format("%-15s %15d원", "합계금액:", order.getPrice()));
-        System.out.println(String.format("%-15s %15d원", "할인금액:", -order.getDiscountPrice()));
-        System.out.println(String.format("%-15s %15d원", "결제금액:", order.getTotalPrice()));
+        System.out.printf("%-15s %15d원%n", "합계금액:", order.getPrice());
+        System.out.printf("%-15s %15d원%n", "할인금액:", -order.getDiscountPrice());
+        System.out.printf("%-15s %15d원%n", "결제금액:", order.getTotalPrice());
         System.out.println("\033[1;34m+----------------------------------+\033[0m");
     }
 
