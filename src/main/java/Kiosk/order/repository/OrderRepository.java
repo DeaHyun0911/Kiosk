@@ -9,5 +9,7 @@ public interface OrderRepository {
 
     void saveOrder(Order order);
 
-    List<MenuItem> findAll();
+    List<Order> findAll();
+
+    Order findByOrder(Long id);
 }
