@@ -123,7 +123,7 @@ public class KioskApp {
         }
     }
 
-    // 주문 메뉴 메서드
+    // 장바구니 메뉴 메서드
     public void cartMenu() {
         System.out.println();
         System.out.println("\033[38;5;214m[ CART MENU ]\033[0m");
@@ -137,11 +137,13 @@ public class KioskApp {
                 for (int i = 0; i < cartService.getCart().size(); i++) {
                     System.out.println(cartService.getCart().get(i));
                 }
-                System.out.print("삭제할 메뉴 이름를 입력해주세요.");
-                String removeMenu = input.next();
+                String removeMenu = Input("삭제할 메뉴 이름를 입력해주세요: ");
                 CartItem item = cartService.getCart().stream().filter(r -> r.getName().equals(removeMenu)).findFirst().orElseThrow();
                 cartService.getCart().remove(item);
-                cartMenu();
+                if(!cartService.cartIsEmpty()) {
+                    cartMenu();
+                }
+                System.out.println("장바구니가 비었습니다.");
                 break;
             case "2":
                 cartService.getCart().clear();
@@ -179,19 +181,17 @@ public class KioskApp {
         Long discountPrice = 0L;
         System.out.println();
         System.out.println("\033[38;5;214m[ DISCOUNT ]\033[0m");
-        Grade[] grades = Grade.values();
 
+        Grade[] grades = Grade.values();
         for(int i = 0; i < grades.length; i++) {
             System.out.println("\u001B[36m" + (i + 1) + "\u001B[0m. " + grades[i].title + " : " + grades[i].percent + "%");
         }
 
         boolean flag = true;
 
-        int select;
-
         while (flag) {
             try {
-                select = Integer.parseInt(Input("할인 정보를 선택해주세요: "));
+                int select = Integer.parseInt(Input("할인 정보를 선택해주세요: "));
 
                 switch (select) {
                     case 1:
@@ -221,13 +221,11 @@ public class KioskApp {
         }
 
         Order order = new Order(cartService.getCart(), discountPrice);
-//        System.out.println(order.toString());
         orderRepository.saveOrder(order);
-        Long orderId = order.getId();
         cartService.cartClear();
-        System.out.println("주문이 완료되었습니다. ");
 
-        printOrderInfo(orderId);
+        System.out.println("주문이 완료되었습니다. ");
+        printOrderInfo(order.getId());
     }
 
     public void printOrderInfo(Long orderId) {
@@ -245,10 +243,6 @@ public class KioskApp {
         System.out.println(String.format("%-15s %15d원", "할인금액:", -order.getDiscountPrice()));
         System.out.println(String.format("%-15s %15d원", "결제금액:", order.getTotalPrice()));
         System.out.println("\033[1;34m+----------------------------------+\033[0m");
-
     }
-
-
-
 
 }

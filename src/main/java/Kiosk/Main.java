@@ -7,6 +7,5 @@ public class Main {
         KioskApp kioskApp = new KioskApp();
         kioskApp.start();
 
-
     }
 }

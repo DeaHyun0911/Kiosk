@@ -20,4 +20,6 @@ public interface CartService {
     Long totalPrice();
 
     void cartClear();
+
+    boolean cartIsEmpty();
 }

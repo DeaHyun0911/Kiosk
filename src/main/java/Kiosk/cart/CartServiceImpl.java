@@ -60,6 +60,11 @@ public class CartServiceImpl implements CartService {
         cart.clear();
     }
 
+    @Override
+    public boolean cartIsEmpty() {
+        return cart.isEmpty();
+    }
+
 
 }
 

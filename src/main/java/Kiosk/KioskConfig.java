@@ -33,7 +33,6 @@ public class KioskConfig {
         return orderRepository;
     }
 
-
     public MainService mainService() {
         return mainService = new MainServiceImpl(new LocalMenuItemRepository(), cartService());
     }
