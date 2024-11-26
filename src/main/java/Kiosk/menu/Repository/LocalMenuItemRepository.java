@@ -1,5 +1,8 @@
-package Kiosk.menu;
+package Kiosk.menu.Repository;
 
+
+import Kiosk.menu.Category;
+import Kiosk.menu.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +26,18 @@ public class LocalMenuItemRepository implements MenuItemRepository {
             new MenuItem(11L, Category.SIDES,4, "치즈스틱", 2000, "고단백 영양 만점의 모짜렐라 치즈스틱")
     ));
 
-    // 카테고리, 카테고리별 id값으로 선택한 메뉴 필터링
     @Override
-    public MenuItem findByMenu(Category category, int selectId) {
-        return menu.stream()
-                .filter(item -> item.getCategory() == category && item.getSelectId() == selectId)
-                .findFirst().orElseThrow();
+    public List<MenuItem> findAll() {
+        return new ArrayList<>(menu);
     }
 
-    // 카테고리별 메뉴 필터링
-    @Override
-    public List<MenuItem> findByCategory(Category category) {
+    public List<MenuItem> findByCategoryMenu(Category category) {
         return menu.stream()
                 .filter(item -> item.getCategory() == category)
                 .collect(Collectors.toList());
+    }
+
+    public MenuItem findByMenu(Category categoryNumber, int menuNumber) {
+        return findByCategoryMenu(categoryNumber).get(menuNumber - 1);
     }
 }
