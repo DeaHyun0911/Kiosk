@@ -2,10 +2,12 @@ package Kiosk;
 
 import Kiosk.cart.CartService;
 import Kiosk.cart.CartItem;
+import Kiosk.discount.Grade;
 import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
 import Kiosk.menu.Service.MainService;
 import Kiosk.order.Order;
+import Kiosk.order.repository.OrderRepository;
 import Kiosk.order.service.OrderService;
 
 import java.util.Arrays;
@@ -13,8 +15,9 @@ import java.util.Scanner;
 
 public class KioskApp {
     KioskConfig kioskConfig = new KioskConfig();
-    CartService cart = kioskConfig.cartService();
+    CartService cartService = kioskConfig.cartService();
     OrderService orderService = kioskConfig.orderService();
+    OrderRepository orderRepository = kioskConfig.orderRepository();
     MainService mainService = kioskConfig.mainService();
 
     boolean isRun = true; // 반복 실행 / 종료
@@ -86,6 +89,7 @@ public class KioskApp {
     private void quantityHandler(MenuItem selectMenu) {
         while (true) {
             try {
+                System.out.println();
                 int quantity = Integer.parseInt(Input("수량을 적어주세요 (0: 이전으로 돌아가기) : "));
                 if(quantity != 0) {
                     addCartHandler(selectMenu, quantity);
@@ -101,12 +105,12 @@ public class KioskApp {
     private void addCartHandler(MenuItem selectMenu, int quantity) {
         while (true) {
             try {
-                CartItem cartItem = cart.getCartItem(selectMenu, quantity);
+                CartItem cartItem = cartService.getCartItem(selectMenu, quantity);
                 System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
                 System.out.println("\u001B[36m1\u001B[0m. 확인     \u001B[36m2\u001B[0m. 취소");
                 String addCart = Input("");
                 if(addCart.equals("1")) {
-                    cart.addCart(cartItem);
+                    cartService.addCart(cartItem);
                     break;
                 } else if (addCart.equals("2")) {
                     break;
@@ -119,34 +123,32 @@ public class KioskApp {
         }
     }
 
+    // 주문 메뉴 메서드
     public void cartMenu() {
-        boolean flag = true;
         System.out.println();
         System.out.println("\033[38;5;214m[ CART MENU ]\033[0m");
-        cart.cartList();
-        cart.totalPrice();
+        cartService.cartList();
+        cartService.totalPrice();
         System.out.println("\u001B[36m1\u001B[0m. 삭제하기    \u001B[36m2\u001B[0m. 비우기    \u001B[36m3\u001B[0m. 메인으로 돌아가기");
         String select = Input("메뉴 번호를 입력하세요: ");
         switch (select) {
             case "1":
                 System.out.println();
-                for (int i = 0; i < cart.getCart().size(); i++) {
-                    System.out.println(cart.getCart().get(i));
+                for (int i = 0; i < cartService.getCart().size(); i++) {
+                    System.out.println(cartService.getCart().get(i));
                 }
                 System.out.print("삭제할 메뉴 이름를 입력해주세요.");
                 String removeMenu = input.next();
-                CartItem item = cart.getCart().stream().filter(r -> r.getName().equals(removeMenu)).findFirst().orElseThrow();
-                cart.getCart().remove(item);
+                CartItem item = cartService.getCart().stream().filter(r -> r.getName().equals(removeMenu)).findFirst().orElseThrow();
+                cartService.getCart().remove(item);
                 cartMenu();
                 break;
             case "2":
-                cart.getCart().clear();
+                cartService.getCart().clear();
                 System.out.println("장바구니가 비었습니다.");
-                flag = false;
                 break;
             case "3":
                 System.out.println();
-                flag = false;
                 break;
             default:
                 System.out.println("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
@@ -158,22 +160,92 @@ public class KioskApp {
     public void orderMenu() {
         System.out.println();
         System.out.println("\033[38;5;214m[ ORDERS ]\033[0m");
-        cart.cartList();
-        cart.totalPrice();
+        cartService.cartList();
+        cartService.totalPrice();
         System.out.println("\u001B[36m1\u001B[0m. 결제하기    \u001B[36m2\u001B[0m. 취소");
         String select = Input("메뉴 번호를 입력하세요: ");
         switch (select) {
             case "1" :
-                Order order = new Order(cart.getCart());
-                orderService.addOrder(order);
-                cart.cartClear();
-                System.out.println("주문이 완료되었습니다. " + "[ 주문번호: " + "\u001B[36m" + order.getId() + "\u001B[0m ]");
+                discountMenu();
                 break;
             case "2" :
                 break;
             default:
                 System.out.println("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
         }
+    }
+
+    public void discountMenu() {
+        Long discountPrice = 0L;
+        System.out.println();
+        System.out.println("\033[38;5;214m[ DISCOUNT ]\033[0m");
+        Grade[] grades = Grade.values();
+
+        for(int i = 0; i < grades.length; i++) {
+            System.out.println("\u001B[36m" + (i + 1) + "\u001B[0m. " + grades[i].title + " : " + grades[i].percent + "%");
+        }
+
+        boolean flag = true;
+
+        int select;
+
+        while (flag) {
+            try {
+                select = Integer.parseInt(Input("할인 정보를 선택해주세요: "));
+
+                switch (select) {
+                    case 1:
+                        discountPrice = cartService.totalPrice() * Grade.NATIONAL_MERIT.percent / 100;
+                        flag = false;
+                        break;
+                    case 2:
+                        discountPrice = cartService.totalPrice() * Grade.SOLDIER.percent / 100;
+                        flag = false;
+                        break;
+                    case 3:
+                        discountPrice = cartService.totalPrice() * Grade.STUDENT.percent / 100;
+                        flag = false;
+                        break;
+                    case 4:
+                        flag = false;
+                        break;
+                    default:
+                        System.out.println("\u001B[31m메뉴 번호를 확인해주세요!\u001B[0m");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\u001B[31m올바른 숫자를 입력해주세요!\u001B[0m");
+                System.out.println();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        Order order = new Order(cartService.getCart(), discountPrice);
+//        System.out.println(order.toString());
+        orderRepository.saveOrder(order);
+        Long orderId = order.getId();
+        cartService.cartClear();
+        System.out.println("주문이 완료되었습니다. ");
+
+        printOrderInfo(orderId);
+    }
+
+    public void printOrderInfo(Long orderId) {
+        Order order = orderRepository.findByOrder(orderId);
+
+        System.out.println("\033[1;34m+----------------------------------+\033[0m");
+        System.out.println("\033[1;34m          주문번호 : " + orderId + "        \033[0m");
+        System.out.println("\033[1;34m+----------------------------------+\033[0m");
+        System.out.println(String.format("%-15s %5s %10s", "상품명", "수량", "가격"));
+        order.getOrderList().forEach(item ->
+                System.out.println(String.format("%-15s %5s %10s", item.getName(), item.getQuantity(), item.getPrice()))
+        );
+        System.out.println("\033[1;34m+----------------------------------+\033[0m");
+        System.out.println(String.format("%-15s %15d원", "합계금액:", order.getPrice()));
+        System.out.println(String.format("%-15s %15d원", "할인금액:", -order.getDiscountPrice()));
+        System.out.println(String.format("%-15s %15d원", "결제금액:", order.getTotalPrice()));
+        System.out.println("\033[1;34m+----------------------------------+\033[0m");
+
     }
 
 

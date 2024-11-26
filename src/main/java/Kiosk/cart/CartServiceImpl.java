@@ -41,8 +41,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void totalPrice() {
-        int sum = 0;
+    public Long totalPrice() {
+        Long sum = 0L;
         if (!cart.isEmpty()) {
             for (CartItem item : cart) {
                 sum += item.getPrice();
@@ -51,6 +51,8 @@ public class CartServiceImpl implements CartService {
         } else {
             System.out.println("장바구니가 비었습니다.");
         }
+
+        return sum;
     }
 
     @Override

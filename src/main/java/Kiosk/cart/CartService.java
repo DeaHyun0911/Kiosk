@@ -17,7 +17,7 @@ public interface CartService {
 
     void cartList();
 
-    void totalPrice();
+    Long totalPrice();
 
     void cartClear();
 }

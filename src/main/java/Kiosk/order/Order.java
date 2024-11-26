@@ -2,6 +2,7 @@ package Kiosk.order;
 
 import Kiosk.cart.CartItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -9,23 +10,18 @@ public class Order {
 
     private Long id;
     private List<CartItem> orderList;
-    private Long totalPrice;
+    private Long price;
     private Long discountPrice;
+    private Long totalPrice;
 
-    public Order(List<CartItem> orderList) {
+    public Order(List<CartItem> orderList, Long discountPrice) {
         this.id = (long) generateId();
-        this.orderList = orderList;
-        this.totalPrice = totalPrice();
-//        this.discountPrice = discountPrice;
+        this.orderList = new ArrayList<>(orderList);
+        this.price = calculatePrice(orderList);
+        this.discountPrice = discountPrice;
+        this.totalPrice = price - discountPrice;
     }
 
-    public Long totalPrice() {
-        Long sum = 0L;
-        for(CartItem i : orderList) {
-            sum += i.getPrice();
-        }
-        return sum;
-    }
 
     public static int generateId() {
         return ++currentId;
@@ -65,5 +61,38 @@ public class Order {
 
     public Long calculatePrice() {
         return totalPrice - discountPrice;
+    }
+
+    public static int getCurrentId() {
+        return currentId;
+    }
+
+    public static void setCurrentId(int currentId) {
+        Order.currentId = currentId;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    private Long calculatePrice(List<CartItem> orderList) {
+        return orderList.stream()
+                .mapToLong(item -> item.getPrice()) // 가격 * 수량
+                .sum();
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderList=" + orderList +
+                ", price=" + price +
+                ", discountPrice=" + discountPrice +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }
