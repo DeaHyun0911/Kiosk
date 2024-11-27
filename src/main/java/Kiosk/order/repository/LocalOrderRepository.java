@@ -30,4 +30,17 @@ public class LocalOrderRepository implements OrderRepository {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
     }
+
+    @Override
+    public boolean OrderIsEmpty() {
+        return orderList.isEmpty();
+    }
+
+    @Override
+    public List<Long> findAllOrderId() {
+        return orderList.stream()
+                .map(Order::getId) // 각 주문의 ID 추출
+                .collect(Collectors.toList()); // ID를 리스트로 수집
+    }
+
 }
