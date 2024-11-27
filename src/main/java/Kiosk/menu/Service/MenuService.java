@@ -15,5 +15,4 @@ public interface MenuService {
 
     int getMainMenuLength(); // 카테고리 메뉴 길이
     int getItemMenuLength();
-
 }

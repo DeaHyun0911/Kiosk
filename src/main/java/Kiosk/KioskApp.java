@@ -6,7 +6,6 @@ import Kiosk.discount.Grade;
 import Kiosk.menu.MenuItem;
 import Kiosk.menu.Service.MenuService;
 import Kiosk.order.Order;
-import Kiosk.order.repository.OrderRepository;
 import Kiosk.order.service.OrderService;
 import Kiosk.utils.InputService;
 import Kiosk.utils.PrintService;
@@ -28,17 +27,28 @@ public class KioskApp {
             // 메인 메뉴
             menuService.mainMenu();
             int menuLength = menuService.getMainMenuLength();
-            int fistInput = Input.getInput("메뉴 번호를 입력하세요: ", menuLength);
-            if (fistInput <= menuLength - 3) {
-                mainMenuChoice(fistInput); // 카테고리 세부메뉴 보여주기
-            } else if (fistInput == menuLength - 2) { // 주문 메뉴
-                orderMenu();
-            } else if (fistInput == menuLength - 1) { // 장바구니 메뉴
-                cartMenu();
-            } else if (fistInput == 0) {
+            int fistInput = Input.getInput("메뉴 번호를 입력하세요: ", (cartService.cartIsEmpty()) ? menuLength : menuLength + 2);
+
+            // 0 입력 시 종료
+            if(fistInput == 0) {
                 isRun = false;
                 break;
             }
+
+            // 카테고리 메뉴
+            if (fistInput >= 1 && fistInput < menuLength) {
+                mainMenuChoice(fistInput); // 카테고리 세부메뉴 보여주기
+            }
+
+            // 장바구니에 데이터가 있으면 추가메뉴 선택 가능
+            if (!cartService.cartIsEmpty()) {
+                if (fistInput == menuLength) {
+                    orderMenu();
+                } else if (fistInput == menuLength + 1) {
+                    cartMenu();
+                }
+            }
+
         }
     }
 
@@ -73,9 +83,7 @@ public class KioskApp {
                 cartService.addCart(cartItem);
                 print.cart.addCart(cartItem);
             }
-            case 0 -> {
-                return;
-            }
+            case 0 -> {}
             default -> throw new IllegalArgumentException("메뉴 번호를 확인해주세요");
         }
     }
@@ -87,9 +95,7 @@ public class KioskApp {
         switch (select) {
             case 1 -> CartItemDelete();
             case 2 -> cartService.getCart().clear();
-            case 0 -> {
-                return;
-            }
+            case 0 -> {}
             default -> print.common.CheckNumber();
         }
     }
@@ -112,9 +118,7 @@ public class KioskApp {
         int select = Input.getInput("메뉴 번호를 입력하세요: ", 2);
         switch (select) {
             case 1 -> discountMenu();
-            case 0 -> {
-                return;
-            }
+            case 0 -> {}
             default -> print.common.CheckNumber();
         }
     }
