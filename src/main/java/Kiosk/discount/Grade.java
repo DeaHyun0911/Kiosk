@@ -6,8 +6,8 @@ public enum Grade {
     STUDENT("학생", 3),
     PUBLIC("일반", 0);
 
-    public String title;
-    public int percent;
+    public final String title;
+    public final int percent;
 
     Grade(String title, int percent) {
         this.title = title;

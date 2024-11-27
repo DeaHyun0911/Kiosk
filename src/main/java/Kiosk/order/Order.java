@@ -16,11 +16,11 @@ public class Order {
     private Long totalPrice;
     private LocalDateTime createdDate;
 
-    public Order(List<CartItem> orderList, Long discountPrice) {
+    public Order(List<CartItem> orderList) {
         this.id = (long) generateId();
         this.orderList = new ArrayList<>(orderList);
         this.price = calculatePrice(orderList);
-        this.discountPrice = discountPrice;
+        this.discountPrice = 0L;
         this.totalPrice = price - discountPrice;
         this.createdDate = LocalDateTime.now();
     }
@@ -32,10 +32,6 @@ public class Order {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public List<CartItem> getOrderList() {

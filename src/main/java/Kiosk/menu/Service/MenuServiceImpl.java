@@ -14,8 +14,8 @@ public class MenuServiceImpl implements MenuService {
     private final CartService cartService;
     private final PrintService print;
 
-    private int categoryMenuLength = 0;
     private int mainMenuLength = 0;
+    private int itemMenuLength = 0;
 
     public MenuServiceImpl(MenuItemRepository menuItemRepository, CartService cartService, PrintService printService) {
         this.menuItemRepository = menuItemRepository;
@@ -25,40 +25,29 @@ public class MenuServiceImpl implements MenuService {
 
     // 카테고리 메뉴
     @Override
-    public void categoryMenu() {
+    public void mainMenu() {
         Category[] categories = Category.values();
-        print.fistMenu.title();
-        print.fistMenu.menu(categories);
-        if(!cartService.getCart().isEmpty()) {
-            print.fistMenu.addMenu();
-        }
-        print.fistMenu.exit();
-        this.categoryMenuLength = categories.length + 3;
+        boolean hasCartItems = !cartService.getCart().isEmpty();
+        print.main.menus(categories, hasCartItems);
+        this.mainMenuLength = categories.length + 3;
     }
 
-    // 세부 메뉴 출력
+    // 아이템 메뉴
     @Override
     public void itemMenu(int categoryNumber) {
         Category category = intToCategory(categoryNumber);
         List<MenuItem> itemMenu = menuItemRepository.findByCategoryMenu(category);
-        System.out.println();
-        System.out.println("\033[38;5;214m[ " + category + " MENU ]\033[0m");
-        for(int i = 0; i < itemMenu.size(); i++) {
-            System.out.println("\u001B[36m" + (i+1) + "\u001B[0m. " + itemMenu.get(i).getName() + " | " + itemMenu.get(i).getPrice() + "원 " + " | " + itemMenu.get(i).getDescription());
-        }
-        System.out.println("\u001B[36m0.\u001B[0m 뒤로가기");
-
-        this.mainMenuLength = itemMenu.size() + 1;
+        print.item.menus(category, itemMenu);
+        this.itemMenuLength = itemMenu.size() + 1;
     }
 
 
-    // 선택한 메뉴 출력
+    // 선택한 메뉴
     @Override
     public MenuItem selectMenu(int categoryNumber, int select) {
         Category category = intToCategory(categoryNumber);
         MenuItem selectMenu = menuItemRepository.findByMenu(category, select);
-        System.out.println();
-        System.out.println("\u001B[36m선택한 메뉴\u001B[0m: " + selectMenu.getName() + " | " + selectMenu.getPrice() + "원" + " | " + selectMenu.getDescription());
+        print.item.select(selectMenu);
         return selectMenu;
     }
 
@@ -73,13 +62,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public int getCategoryMenuLength() {
-        return categoryMenuLength;
+    public int getMainMenuLength() {
+        return mainMenuLength;
     }
 
     @Override
-    public int getMainMenuLength() {
-        return mainMenuLength;
+    public int getItemMenuLength() {
+        return itemMenuLength;
     }
 
 

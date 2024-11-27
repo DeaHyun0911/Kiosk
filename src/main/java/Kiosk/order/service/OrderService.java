@@ -4,6 +4,8 @@ import Kiosk.order.Order;
 
 public interface OrderService {
 
-    void addOrder(Order orderItem);
+    void createOrder(Order orderItem);
+
+    Order findByOrder(Long Id);
 
 }
