@@ -25,9 +25,10 @@ public class KioskApp {
 
         while (isRun) {
             // 메인 메뉴
-            menuService.mainMenu();
+            menuService.mainMenu(orderService.orderIsEmpty());
             int menuLength = menuService.getMainMenuLength();
-            int fistInput = Input.getInput("메뉴 번호를 입력하세요: ", (cartService.cartIsEmpty()) ? menuLength : menuLength + 2);
+            int dynamicLength = lengthChange(menuLength);
+            int fistInput = Input.getInput("메뉴 번호를 입력하세요: ", dynamicLength);
 
             // 0 입력 시 종료
             if(fistInput == 0) {
@@ -40,12 +41,16 @@ public class KioskApp {
                 mainMenuChoice(fistInput); // 카테고리 세부메뉴 보여주기
             }
 
-            // 장바구니에 데이터가 있으면 추가메뉴 선택 가능
+            // 장바구니에 데이터가 있으면 추가메뉴 선택 가능 / 주문
             if (!cartService.cartIsEmpty()) {
                 if (fistInput == menuLength) {
                     orderMenu();
                 } else if (fistInput == menuLength + 1) {
                     cartMenu();
+                }
+            } else if (!orderService.orderIsEmpty()) {
+                if (fistInput == menuLength) {
+                    orderInfo();
                 }
             }
 
@@ -63,11 +68,21 @@ public class KioskApp {
         }
     }
 
+    // 메뉴길이 검증을 위한 데이터 변경 메서드
+    private int lengthChange(int menuLength) {
+        if(!cartService.cartIsEmpty()) {
+            return menuLength + 2;
+        } else if (!orderService.orderIsEmpty()) {
+            return menuLength + 1;
+        }
+        return menuLength;
+    }
+
 
     // 수량 선택 메서드
     private void quantityHandler(MenuItem selectMenu) {
         print.common.space();
-        int quantity = Input.getQuantityInput("수량을 적어주세요: ");
+        int quantity = Input.quantityInput("수량을 적어주세요: ");
         if (quantity != 0) {
             addCartHandler(selectMenu, quantity);
         }
@@ -138,11 +153,25 @@ public class KioskApp {
             }
             default -> print.common.CheckNumber();
         }
-        
+
 
 
         orderService.createOrder(order);
         print.order.receipt(orderService.findByOrder(order.getId()));
+    }
+
+    // 주문 정보 조회
+    public void orderInfo() {
+        try {
+            print.order.orderInfo();
+            int orderID = Input.orderIdInput("ID: ", orderService.OrderList());
+            if (orderID != 0) {
+                Order order = orderService.findByOrder((long) orderID);
+                print.order.receipt(order);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("주문번호가 없습니다.");
+        }
     }
 
 }

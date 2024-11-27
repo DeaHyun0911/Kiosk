@@ -4,6 +4,8 @@ import Kiosk.cart.CartService;
 import Kiosk.order.Order;
 import Kiosk.order.repository.OrderRepository;
 
+import java.util.List;
+
 public class OrderServiceImpl implements OrderService {
     private final CartService cartService;
     private final OrderRepository orderRepository;
@@ -26,5 +28,18 @@ public class OrderServiceImpl implements OrderService {
     public Order findByOrder(Long Id) {
         return orderRepository.findByOrder(Id);
     }
+
+    @Override
+    public boolean orderIsEmpty() {
+        return orderRepository.OrderIsEmpty();
+    }
+
+    @Override
+    public List<Long> OrderList() {
+        return orderRepository.findAllOrderId();
+    }
+
+
+
 
 }

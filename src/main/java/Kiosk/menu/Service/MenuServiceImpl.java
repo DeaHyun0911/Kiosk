@@ -4,6 +4,7 @@ import Kiosk.cart.CartService;
 import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
 import Kiosk.menu.Repository.MenuItemRepository;
+import Kiosk.order.service.OrderService;
 import Kiosk.utils.PrintService;
 
 import java.util.List;
@@ -25,10 +26,10 @@ public class MenuServiceImpl implements MenuService {
 
     // 카테고리 메뉴
     @Override
-    public void mainMenu() {
+    public void mainMenu(boolean orderIsEmpty) {
         Category[] categories = Category.values();
         boolean hasCartItems = !cartService.getCart().isEmpty();
-        print.main.menus(categories, hasCartItems);
+        print.main.menus(categories, hasCartItems, orderIsEmpty);
         this.mainMenuLength = categories.length + 1;
     }
 

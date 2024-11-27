@@ -12,4 +12,8 @@ public interface OrderRepository {
     List<Order> findAll();
 
     Order findByOrder(Long id);
+
+    boolean OrderIsEmpty();
+
+    List<Long> findAllOrderId();
 }

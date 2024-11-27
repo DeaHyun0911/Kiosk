@@ -5,7 +5,7 @@ import Kiosk.menu.MenuItem;
 
 public interface MenuService {
 
-    void mainMenu();
+    void mainMenu(boolean orderIsEmpty);
 
     void itemMenu(int categoryNumber);
 

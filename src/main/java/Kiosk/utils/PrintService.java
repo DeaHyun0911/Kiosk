@@ -46,11 +46,14 @@ public class PrintService {
     // 카테고리 메뉴 출력 관리
     public class MainPrinter {
 
-        public void menus(Category[] categories, boolean hasCartItems) {
+        public void menus(Category[] categories, boolean hasCartItems, boolean hasOrderItems) {
             title();
             menu(categories);
             if (hasCartItems) {
-                addMenu();
+                orderMenu();
+                cartMenu();
+            } else if (!hasOrderItems) {
+                orderInfo();
             }
             exit();
         }
@@ -64,8 +67,16 @@ public class PrintService {
             System.out.println(color("0. ", teal) + "EXIT");
         }
 
-        public void addMenu() {
-            System.out.print(color("4. ", teal) + "ORDERS    " + color("5. ", teal) + "CART    ");
+        public void cartMenu() {
+            System.out.print(color("5. ", teal) + "CART    ");
+        }
+
+        public void orderMenu() {
+            System.out.print(color("4. ", teal) + "ORDERS    ");
+        }
+
+        public void orderInfo() {
+            System.out.print(color("4. ", teal) + "ORDER INFO    ");
         }
 
         public void menu(Category[] categories) {
@@ -156,6 +167,10 @@ public class PrintService {
             CartPrinter.cartList(cart);
             CartPrinter.totalPrice(totalPrice);
             menu();
+        }
+
+        public void orderInfo() {
+            System.out.println("조회할 주문번호를 입력하세요. (0 입력 시 돌아가기)");
         }
 
         public void title() {

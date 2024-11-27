@@ -37,7 +37,6 @@ public class InputService {
         for (int i = 0; i < menuLength; i++) {
             list.add(i);
         }
-        System.out.println(list);
         return list;
     }
 
@@ -62,7 +61,7 @@ public class InputService {
 
 
     // 수량 선택을 위한 메서드
-    public int getQuantityInput(String message) {
+    public int quantityInput(String message) {
         while (true) {
             try {
                 String input = scannerInput(message);
@@ -70,6 +69,27 @@ public class InputService {
                     return intValidated(input);
                 } else {
                     throw new NumberFormatException("0 이상의 숫자를 입력해주세요.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    // 주문 id 조회 메서드
+    public int orderIdInput(String message, List<Long> orderIdList) {
+        while (true) {
+            try {
+                String input = scannerInput(message);
+
+                if (input.equals("0")) {
+                    return 0;
+                }
+
+                if (intValidated(input) != 0 && orderIdList.contains(Long.parseLong(input))) {
+                    return intValidated(input);
+                } else {
+                    throw new NumberFormatException("없는 주문번호입니다.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println(e.getMessage());
