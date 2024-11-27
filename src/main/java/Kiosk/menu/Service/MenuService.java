@@ -5,7 +5,7 @@ import Kiosk.menu.MenuItem;
 
 public interface MenuService {
 
-    void categoryMenu();
+    void mainMenu();
 
     void itemMenu(int categoryNumber);
 
@@ -13,7 +13,7 @@ public interface MenuService {
 
     Category intToCategory(int categoryNumber);
 
-    int getCategoryMenuLength(); // 카테고리 메뉴 길이
-    int getMainMenuLength();
+    int getMainMenuLength(); // 카테고리 메뉴 길이
+    int getItemMenuLength();
 
 }

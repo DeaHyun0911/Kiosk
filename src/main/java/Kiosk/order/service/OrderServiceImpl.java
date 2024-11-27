@@ -13,8 +13,18 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
+    // 주문 생성
     @Override
-    public void addOrder(Order orderItem) {
+    public void createOrder(Order orderItem) {
         orderRepository.saveOrder(orderItem);
+        cartService.getCart().clear();
+        System.out.println("주문이 완료되었습니다. ");
     }
+
+    // 주문 찾기
+    @Override
+    public Order findByOrder(Long Id) {
+        return orderRepository.findByOrder(Id);
+    }
+
 }
