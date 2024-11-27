@@ -3,124 +3,77 @@ package Kiosk;
 import Kiosk.cart.CartService;
 import Kiosk.cart.CartItem;
 import Kiosk.discount.Grade;
-import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
-import Kiosk.menu.Service.MainService;
+import Kiosk.menu.Service.MenuService;
 import Kiosk.order.Order;
 import Kiosk.order.repository.OrderRepository;
 import Kiosk.order.service.OrderService;
-
-import java.util.Arrays;
-import java.util.Scanner;
+import Kiosk.utils.InputService;
 
 public class KioskApp {
     KioskConfig kioskConfig = new KioskConfig();
     CartService cartService = kioskConfig.cartService();
     OrderService orderService = kioskConfig.orderService();
     OrderRepository orderRepository = kioskConfig.orderRepository();
-    MainService mainService = kioskConfig.mainService();
+    MenuService menuService = kioskConfig.menuService();
+    InputService input1 = kioskConfig.inputService();
 
     boolean isRun = true; // 반복 실행 / 종료
-    String[] categoryListNumber = Category.numberArray(); // 입력 숫자와 카테고리 메뉴 매칭을 위한 배열
-    Scanner input = new Scanner(System.in);
 
     void start() {
         System.out.println("주문을 시작합니다.");
 
         while(isRun) {
-            try {
                 // 카테고리 메뉴
-                mainService.categoryMenu();
-                String fistInput = Input("메뉴 번호를 입력하세요: ");
-                if(Arrays.asList(categoryListNumber).contains(fistInput)) {
+                menuService.categoryMenu();
+                int menuLength = menuService.getCategoryMenuLength();
+                int fistInput = input1.getInput("메뉴 번호를 입력하세요: ", menuLength);
+                if(fistInput <= menuLength - 3) {
                     CategoryMenuChoice(fistInput); // 카테고리 세부메뉴 보여주기
-                } else if (fistInput.equals("4")) { // 주문 메뉴
+                } else if (fistInput == menuLength - 2) { // 주문 메뉴
                     orderMenu();
-                    continue;
-                } else if(fistInput.equals("5")) { // 장바구니 메뉴
+                } else if(fistInput == menuLength - 1) { // 장바구니 메뉴
                     cartMenu();
-                    continue;
-                } else if (fistInput.equals("0")) {
+                } else if (fistInput == 0) {
                     isRun = false;
                     break;
-                } else {
-                    throw new IllegalArgumentException("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
         }
-    }
-
-    // 사용자 입력 메서드
-    private String Input(String str) {
-        System.out.print(str);
-        return input.nextLine();
     }
 
 
     // 카테고리 메뉴 선택에 따라 메인메뉴 보여주고 선택하는 메서드
-    private void CategoryMenuChoice(String fistInput) {
-        while (true) {
-            try {
-                int menuLength = mainService.itemMenu(fistInput);
-                String menuChoice = Input("메뉴 번호를 입력하세요: ");
-                if (Integer.parseInt(menuChoice) <= menuLength && !menuChoice.equals("0")) {
-                    MenuItem selectMenu = mainService.selectMenu(fistInput, menuChoice);
+    private void CategoryMenuChoice(int fistInput) {
+                menuService.itemMenu(fistInput);
+                int menuChoice = input1.getInput("메뉴 번호를 입력하세요: ", menuService.getMainMenuLength());
+                if (menuChoice != 0) {
+                    MenuItem selectMenu = menuService.selectMenu(fistInput, menuChoice);
                     quantityHandler(selectMenu);
-                    break;
-                } else if (menuChoice.equals("0")) {
-                    break;
-                } else {
-                    throw new IllegalArgumentException("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("\u001B[31m숫자만 입력 해주세요!\u001B[0m");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
     }
 
 
     // 수량 선택 메서드
     private void quantityHandler(MenuItem selectMenu) {
-        while (true) {
-            try {
                 System.out.println();
-                int quantity = Integer.parseInt(Input("수량을 적어주세요 (0: 이전으로 돌아가기) : "));
+                int quantity = input1.getQuantityInput("수량을 적어주세요: ");
                 if(quantity != 0) {
                     addCartHandler(selectMenu, quantity);
                 }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("\u001B[31m숫자만 입력 해주세요!\u001B[0m");
-            }
-        }
     }
 
     // 장바구니에 메뉴 추가
     private void addCartHandler(MenuItem selectMenu, int quantity) {
-        while (true) {
-            try {
                 CartItem cartItem = cartService.getCartItem(selectMenu, quantity);
                 System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-                System.out.println("\u001B[36m1\u001B[0m. 확인     \u001B[36m2\u001B[0m. 취소");
-                String addCart = Input("");
-                if(addCart.equals("1")) {
-                    cartService.addCart(cartItem);
-                    break;
-                } else if (addCart.equals("2")) {
-                    break;
-                } else {
-                    throw new IllegalArgumentException("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
+                System.out.println("\u001B[36m1\u001B[0m. 확인     \u001B[36m0\u001B[0m. 취소");
+
+                int addCart = input1.getInput("메뉴 번호를 입력하세요: ", 2);
+                switch (addCart) {
+                    case 1 -> cartService.addCart(cartItem);
+                    case 0 -> { return; }
+                    default -> throw new IllegalArgumentException("메뉴 번호를 확인해주세요");
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
     }
 
     // 장바구니 메뉴 메서드
@@ -130,14 +83,14 @@ public class KioskApp {
         cartService.cartList();
         System.out.println("합계: " + "\u001B[36m" + cartService.totalPrice() + "\u001B[0m" + "원");
         System.out.println("\u001B[36m1\u001B[0m. 삭제하기    \u001B[36m2\u001B[0m. 비우기    \u001B[36m3\u001B[0m. 메인으로 돌아가기");
-        String select = Input("메뉴 번호를 입력하세요: ");
+        int select = input1.getInput("메뉴 번호를 입력하세요: ", 3);
         switch (select) {
-            case "1":
+            case 1:
                 System.out.println();
                 for (int i = 0; i < cartService.getCart().size(); i++) {
                     System.out.println(cartService.getCart().get(i));
                 }
-                String removeMenu = Input("삭제할 메뉴 이름를 입력해주세요: ");
+                String removeMenu = input1.stringInput("삭제할 메뉴 이름를 입력해주세요: ");
                 CartItem item = cartService.getCart().stream().filter(r -> r.getName().equals(removeMenu)).findFirst().orElseThrow();
                 cartService.getCart().remove(item);
                 if(!cartService.cartIsEmpty()) {
@@ -145,11 +98,11 @@ public class KioskApp {
                 }
                 System.out.println("장바구니가 비었습니다.");
                 break;
-            case "2":
+            case 2:
                 cartService.getCart().clear();
                 System.out.println("장바구니가 비었습니다.");
                 break;
-            case "3":
+            case 3:
                 System.out.println();
                 break;
             default:
@@ -165,15 +118,11 @@ public class KioskApp {
         cartService.cartList();
         System.out.println("합계: " + "\u001B[36m" + cartService.totalPrice() + "\u001B[0m" + "원");
         System.out.println("\u001B[36m1\u001B[0m. 결제하기    \u001B[36m2\u001B[0m. 취소");
-        String select = Input("메뉴 번호를 입력하세요: ");
+        int select = input1.getInput("메뉴 번호를 입력하세요: ", 2);
         switch (select) {
-            case "1" :
-                discountMenu();
-                break;
-            case "2" :
-                break;
-            default:
-                System.out.println("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
+            case 1 -> discountMenu();
+            case 0 -> { return; }
+            default -> System.out.println("\u001B[31m메뉴번호를 확인해주세요!\u001B[0m");
         }
     }
 
@@ -191,7 +140,7 @@ public class KioskApp {
 
         while (flag) {
             try {
-                int select = Integer.parseInt(Input("할인 정보를 선택해주세요: "));
+                int select = input1.getInput("할인 정보를 선택해주세요: ", 4);
 
                 switch (select) {
                     case 1:
