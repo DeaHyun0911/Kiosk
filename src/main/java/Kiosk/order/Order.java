@@ -2,6 +2,7 @@ package Kiosk.order;
 
 import Kiosk.cart.CartItem;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Order {
     private Long price;
     private Long discountPrice;
     private Long totalPrice;
+    private LocalDateTime createdDate;
 
     public Order(List<CartItem> orderList, Long discountPrice) {
         this.id = (long) generateId();
@@ -20,6 +22,7 @@ public class Order {
         this.price = calculatePrice(orderList);
         this.discountPrice = discountPrice;
         this.totalPrice = price - discountPrice;
+        this.createdDate = LocalDateTime.now();
     }
 
 
@@ -77,6 +80,14 @@ public class Order {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     private Long calculatePrice(List<CartItem> orderList) {
