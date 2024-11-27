@@ -7,11 +7,13 @@ public class CartItem {
     private String name;
     private int quantity;
     private int price;
+    private int delay;
 
-    public CartItem(String name, int quantity, int price) {
+    public CartItem(String name, int quantity, int price, int time) {
         this.name = name;
         this.quantity = quantity;
         this.price = price * quantity;
+        this.delay = time;
     }
 
     public String getName() {
@@ -43,4 +45,15 @@ public class CartItem {
         return name + " | " + quantity + "개 | " + price + "원";
     }
 
+    public String toString2()  {
+        return name + " | " + quantity + "개 | " + price + "원" + delay;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
 }

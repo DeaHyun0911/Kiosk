@@ -20,4 +20,6 @@ public interface CartService {
     void cartClear();
 
     boolean cartIsEmpty();
+
+    int totalDelay();
 }

@@ -7,6 +7,8 @@ import Kiosk.menu.Category;
 import Kiosk.menu.MenuItem;
 import Kiosk.order.Order;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PrintService {
@@ -162,6 +164,8 @@ public class PrintService {
     // 주문 관련 출력
     public class OrderPrinter {
 
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH시mm분");
+
         public void orderDisplayMenu(List<CartItem> cart, Long totalPrice) {
             title();
             CartPrinter.cartList(cart);
@@ -186,6 +190,8 @@ public class PrintService {
             System.out.println("\033[1;34m+----------------------------------+\033[0m");
             System.out.println("\033[1;34m          주문번호 : " + order.getId() + "        \033[0m");
             System.out.println("\033[1;34m+----------------------------------+\033[0m");
+//            System.out.println("\033[1;34m          " + order.getCreatedDate().format(dateFormat) + "        \033[0m");
+//            System.out.println("\033[1;34m+----------------------------------+\033[0m");
             System.out.println(String.format("%-15s %5s %10s", "상품명", "수량", "가격"));
             order.getOrderList().forEach(item ->
                     System.out.printf("%-15s %5s %10s%n", item.getName(), item.getQuantity(), item.getPrice())
@@ -195,6 +201,34 @@ public class PrintService {
             System.out.printf("%-8s %5s %6d원%n", "할인금액:", order.getGrade().title + "혜택(" + order.getGrade().percent + "%)", -order.getDiscountPrice());
             System.out.printf("%-15s %15d원%n", "결제금액:", order.getTotalPrice());
             System.out.println("\033[1;34m+----------------------------------+\033[0m");
+        }
+
+        public void delayInfo(Order order, int delay) {
+            LocalDateTime completeTime = order.getCreatedDate().plusMinutes(delay);
+            System.out.println("\033[1;34m    주문일자: " + order.getCreatedDate().format(dateFormat) + "     \033[0m");
+            System.out.println("\033[1;34m+----------------------------------+\033[0m");
+            System.out.println("\033[1;34m예상대기시간은 " + delayToTime(delay) + ", \033[0m");
+            System.out.println("\033[1;34m예상완료일시는 " + completeTime.format(dateFormat) + "입니다.\033[0m");
+            System.out.println("\033[1;34m+----------------------------------+\033[0m");
+        }
+
+        public String delayToTime(int delay) {
+            int days = delay / (24 * 60);
+            int hours = (delay % (24 * 60)) / 60;
+            int minutes = delay % 60;
+
+            StringBuilder result = new StringBuilder();
+            if (days > 0) {
+                result.append(days).append("일 ");
+            }
+            if (hours > 0) {
+                result.append(hours).append("시간 ");
+            }
+            if (minutes > 0) {
+                result.append(minutes).append("분");
+            }
+
+            return result.toString();
         }
     }
 

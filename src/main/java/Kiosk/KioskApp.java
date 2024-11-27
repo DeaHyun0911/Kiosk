@@ -96,6 +96,7 @@ public class KioskApp {
         switch (addCart) {
             case 1 -> {
                 cartService.addCart(cartItem);
+                System.out.println(cartItem.toString2());
                 print.cart.addCart(cartItem);
             }
             case 0 -> {}
@@ -154,10 +155,10 @@ public class KioskApp {
             default -> print.common.CheckNumber();
         }
 
-
-
+        int delay = cartService.totalDelay();
         orderService.createOrder(order);
         print.order.receipt(orderService.findByOrder(order.getId()));
+        print.order.delayInfo(order, delay);
     }
 
     // 주문 정보 조회

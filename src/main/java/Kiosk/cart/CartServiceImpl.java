@@ -13,7 +13,7 @@ public class CartServiceImpl implements CartService {
     // 장바구니 아이템 생성
     @Override
     public CartItem setCartItem(MenuItem item, int quantity) {
-        CartItem cartItem = new CartItem(item.getName(), quantity, item.getPrice());
+        CartItem cartItem = new CartItem(item.getName(), quantity, item.getPrice(), item.getTime());
         return cartItem;
     }
 
@@ -50,6 +50,16 @@ public class CartServiceImpl implements CartService {
 
         return sum;
     }
+
+    @Override
+    public int totalDelay() {
+        int sum = 0;
+            for (CartItem item : cart) {
+                sum += item.getDelay();
+            }
+        return sum;
+    }
+
 
     // 장바구니 비우기
     @Override

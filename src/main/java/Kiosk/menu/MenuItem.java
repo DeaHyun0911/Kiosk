@@ -8,14 +8,16 @@ public class MenuItem {
     private String name;
     private int price;
     private String description;
+    private int time;
 
-    public MenuItem(Long id, Category category, int selectId, String name, int price, String description) {
+    public MenuItem(Long id, Category category, int selectId, String name, int price, String description, int time) {
         this.id = id;
         this.category = category;
         this.selectId = selectId;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.time = time;
     }
 
     public Long getId() {
@@ -64,5 +66,13 @@ public class MenuItem {
 
     public void setSelectId(int selectId) {
         this.selectId = selectId;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }
