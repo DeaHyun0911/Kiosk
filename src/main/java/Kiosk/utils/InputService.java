@@ -37,6 +37,7 @@ public class InputService {
         for (int i = 0; i < menuLength; i++) {
             list.add(i);
         }
+        System.out.println(list);
         return list;
     }
 

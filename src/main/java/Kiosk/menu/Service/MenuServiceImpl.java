@@ -29,7 +29,7 @@ public class MenuServiceImpl implements MenuService {
         Category[] categories = Category.values();
         boolean hasCartItems = !cartService.getCart().isEmpty();
         print.main.menus(categories, hasCartItems);
-        this.mainMenuLength = categories.length + 3;
+        this.mainMenuLength = categories.length + 1;
     }
 
     // 아이템 메뉴
@@ -70,6 +70,5 @@ public class MenuServiceImpl implements MenuService {
     public int getItemMenuLength() {
         return itemMenuLength;
     }
-
 
 }
