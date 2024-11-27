@@ -148,7 +148,7 @@ public class PrintService {
         }
 
         public void menu() {
-            System.out.println("\u001B[36m1\u001B[0m. 삭제하기    \u001B[36m2\u001B[0m. 비우기    \u001B[36m3\u001B[0m. 메인으로 돌아가기");
+            System.out.println("\u001B[36m1\u001B[0m. 삭제하기    \u001B[36m2\u001B[0m. 비우기    \u001B[36m0\u001B[0m. 메인으로 돌아가기");
         }
 
         public void addCart(CartItem item) {
@@ -229,6 +229,10 @@ public class PrintService {
             }
 
             return result.toString();
+        }
+
+        public void easterEgg() {
+            System.out.println("\033[33m신\033[0m께서 \033[33m전설의 버거\033[0m를 주문하여 버거가 즉시 완성됩니다.");
         }
     }
 

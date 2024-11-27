@@ -144,21 +144,27 @@ public class KioskApp {
         Order order = new Order(cartService.getCart());
 
         print.discount.discountDisplayMenu();
-        int select = Input.getInput("할인 정보를 선택해주세요: ", 4);
+        int select = Input.getInput("할인 정보를 선택해주세요: ", 6);
         switch (select) {
             case 1 -> order.setDiscountPrice(Grade.NATIONAL_MERIT);
             case 2 -> order.setDiscountPrice(Grade.SOLDIER);
             case 3 -> order.setDiscountPrice(Grade.STUDENT);
-            case 4 -> {
-                return;
-            }
+            case 4 -> order.setDiscountPrice(Grade.PUBLIC);
+            case 5 -> order.setDiscountPrice(Grade.GOT);
+            case 0 -> {}
             default -> print.common.CheckNumber();
         }
 
         int delay = cartService.totalDelay();
+
         orderService.createOrder(order);
         print.order.receipt(orderService.findByOrder(order.getId()));
-        print.order.delayInfo(order, delay);
+        if (order.getGrade() == Grade.GOT && findByLegend(order)) {
+            delay = 0;
+            print.order.easterEgg();
+        } else {
+            print.order.delayInfo(order, delay);
+        }
     }
 
     // 주문 정보 조회
@@ -173,6 +179,11 @@ public class KioskApp {
         } catch (IllegalArgumentException e) {
             System.out.println("주문번호가 없습니다.");
         }
+    }
+
+    // 이스터 에그
+    public boolean findByLegend(Order order) {
+        return order.getOrderList().stream().anyMatch(cartItem -> cartItem.getName().equals("\033[33m전설의 버거\033[0m"));
     }
 
 }
