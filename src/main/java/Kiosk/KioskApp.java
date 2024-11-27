@@ -130,14 +130,16 @@ public class KioskApp {
         print.discount.discountDisplayMenu();
         int select = Input.getInput("할인 정보를 선택해주세요: ", 4);
         switch (select) {
-            case 1 -> order.setDiscountPrice(cartService.totalPrice() * Grade.NATIONAL_MERIT.percent / 100);
-            case 2 -> order.setDiscountPrice(cartService.totalPrice() * Grade.SOLDIER.percent / 100);
-            case 3 -> order.setDiscountPrice(cartService.totalPrice() * Grade.STUDENT.percent / 100);
+            case 1 -> order.setDiscountPrice(Grade.NATIONAL_MERIT);
+            case 2 -> order.setDiscountPrice(Grade.SOLDIER);
+            case 3 -> order.setDiscountPrice(Grade.STUDENT);
             case 4 -> {
                 return;
             }
             default -> print.common.CheckNumber();
         }
+        
+
 
         orderService.createOrder(order);
         print.order.receipt(orderService.findByOrder(order.getId()));

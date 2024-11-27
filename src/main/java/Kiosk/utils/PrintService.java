@@ -177,7 +177,7 @@ public class PrintService {
             );
             System.out.println("\033[1;34m+----------------------------------+\033[0m");
             System.out.printf("%-15s %15d원%n", "합계금액:", order.getPrice());
-            System.out.printf("%-15s %15d원%n", "할인금액:", -order.getDiscountPrice());
+            System.out.printf("%-8s %5s %6d원%n", "할인금액:", order.getGrade().title + "혜택(" + order.getGrade().percent + "%)", -order.getDiscountPrice());
             System.out.printf("%-15s %15d원%n", "결제금액:", order.getTotalPrice());
             System.out.println("\033[1;34m+----------------------------------+\033[0m");
         }

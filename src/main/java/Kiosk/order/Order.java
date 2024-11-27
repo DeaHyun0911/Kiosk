@@ -1,6 +1,7 @@
 package Kiosk.order;
 
 import Kiosk.cart.CartItem;
+import Kiosk.discount.Grade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class Order {
     private static int currentId = 0;
 
     private Long id;
+    private Grade grade;
     private List<CartItem> orderList;
     private Long price;
     private Long discountPrice;
@@ -18,6 +20,7 @@ public class Order {
 
     public Order(List<CartItem> orderList) {
         this.id = (long) generateId();
+        this.grade = Grade.PUBLIC;
         this.orderList = new ArrayList<>(orderList);
         this.price = calculatePrice(orderList);
         this.discountPrice = 0L;
@@ -25,6 +28,13 @@ public class Order {
         this.createdDate = LocalDateTime.now();
     }
 
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
 
     public static int generateId() {
         return ++currentId;
@@ -46,16 +56,18 @@ public class Order {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalPrice() {
+        this.totalPrice = price - discountPrice;
     }
 
     public Long getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(Long discountPrice) {
-        this.discountPrice = discountPrice;
+    public void setDiscountPrice(Grade grade) {
+        this.discountPrice = getPrice() * grade.percent / 100;
+        setTotalPrice();
+        setGrade(grade);
     }
 
     public Long calculatePrice() {
@@ -96,10 +108,12 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", grade=" + grade +
                 ", orderList=" + orderList +
                 ", price=" + price +
                 ", discountPrice=" + discountPrice +
                 ", totalPrice=" + totalPrice +
+                ", createdDate=" + createdDate +
                 '}';
     }
 }
