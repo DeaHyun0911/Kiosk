@@ -13,30 +13,30 @@ Java를 이용해 만든 콘솔 기반 키오스크앱입니다.
   * 특정 조건에 따른 이스터에그가 있습니다.
 
 ## 구조
-####KioskApp
+#### KioskApp
 전체적인 앱 실행 과정을 루프하고 관리합니다.
 
-####KioskConfig
+#### KioskConfig
 앱의 전체적인 의존관계 주입 및 설정을 관리합니다.
 
-####menu Package
+#### menu Package
 - MenuService : 주문메뉴 비즈니스 로직 관리
 - MenuItemRepository : 주문메뉴 데이터 저장소
 - Category : 메뉴 카테고리 타입 클래스
 - MenuItem : 메뉴 데이터 클래스
 
-####cart Package
+#### cart Package
 - CartService : 장바구니 비즈니스 로직 관리
 - CartItem : 장바구니 데이터 클래스
 
-####Order Package
+#### Order Package
 - OrderService : 주문 비즈니스 로직 관리
 - OrderRepository : 주문 데이터 저장소
 - Order : 주문 데이터 클래스
 
-####discount Package
+#### discount Package
 - Grade : 할인정책 타입 클래스
 
-####utils Package
+#### utils Package
 - InputService : 사용자 입력 및 예외 처리 관리
 - PrintService : 콘솔 메세지 출력 관리
