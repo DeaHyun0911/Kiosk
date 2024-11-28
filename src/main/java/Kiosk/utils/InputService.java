@@ -11,13 +11,13 @@ public class InputService {
         this.scanner = new Scanner(System.in);
     }
 
-    // 사용자 입력을 받아옴
+    // 사용자 입력을 받아옵니다.
     public String scannerInput(String str) {
         System.out.print(str);
         return scanner.nextLine();
     }
 
-    // 받은 문자열 숫자인지 검증
+    // 받은 문자열 숫자인지 검증하고 숫자로 반환합니다.
     private int intValidated(String number) {
         try {
             return Integer.parseInt(number); // 숫자 변환 시도
@@ -26,12 +26,12 @@ public class InputService {
         }
     }
 
-    // 입력한 숫자가 메뉴 범위 안에 있는 지 확인
+    // 입력한 숫자가 메뉴 범위 안에 있는 지 확인하고 Boolean 반환
     private boolean optionValidated(int result, List<Integer> options) {
         return options.contains(result);
     }
 
-    // 입력받은 메뉴 길이를 배열로 변환
+    // 입력받은 메뉴 길이를 숫자 배열로 변환
     public static List<Integer> createList(int menuLength) {
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < menuLength; i++) {
@@ -76,7 +76,12 @@ public class InputService {
         }
     }
 
-    // 주문 id 조회 메서드
+    /**
+     * 사용자 입력을 받고 현재 주문 리스트의 ID값에 포함되어 있는 지 검증합니다.
+     * @param message 입력 메세지
+     * @param orderIdList 주문 ID 리스트
+     * @return
+     */
     public int orderIdInput(String message, List<Long> orderIdList) {
         while (true) {
             try {

@@ -24,7 +24,13 @@ public class MenuServiceImpl implements MenuService {
         this.print = printService;
     }
 
-    // 카테고리 메뉴
+    /**
+     * 현재 카테고리 타입을 배열로 만들어
+     * 메뉴 출력 메서드로 카테고리, 장바구니 데이터 여부, 주문 데이터 여부를 전달합니다.
+     * 데이터에 따라 알맞는 메뉴를 출력합니다.
+     * 카테고리 길이를 현재 메뉴 길이로 설정합니다.
+     * @param orderIsEmpty 주문 데이터 여부
+     */
     @Override
     public void mainMenu(boolean orderIsEmpty) {
         Category[] categories = Category.values();
@@ -33,7 +39,12 @@ public class MenuServiceImpl implements MenuService {
         this.mainMenuLength = categories.length + 1;
     }
 
-    // 아이템 메뉴
+    /**
+     * 받은 값은 카테고리 타입으로 변환하여 저장소에서 메뉴 리스트를 찾아옵니다.
+     * 받아온 메뉴 리스트를 출력 메서드로 전달해 메뉴를 출력합니다.
+     * 메뉴길이를 사용자가 선택한 메뉴길이로 설정합니다.
+     * @param categoryNumber 선택한 카테고리
+     */
     @Override
     public void itemMenu(int categoryNumber) {
         Category category = intToCategory(categoryNumber);
@@ -43,7 +54,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
 
-    // 선택한 메뉴
+    /**
+     * 사용자가 입력한 값에 따라 저장소에서 메뉴 데이터를 찾아옵니다.
+     * 찾아온 메뉴 데이터를 출력하고 반환합니다.
+     * @param categoryNumber 선택한 카테고리
+     * @param select 선택한 메뉴
+     * @return
+     */
     @Override
     public MenuItem selectMenu(int categoryNumber, int select) {
         Category category = intToCategory(categoryNumber);
@@ -52,7 +69,12 @@ public class MenuServiceImpl implements MenuService {
         return selectMenu;
     }
 
-    // 선택한 숫자를 카테고리 타입으로 변경
+    /**
+     * 숫자 타입으로 받은 변수를 저장소에서 필터링 할 수 있도록
+     * 카테고리 타입으로 변경하여 반환합니다.
+     * @param categoryNumber 선택한 카테고리
+     * @return
+     */
     @Override
     public Category intToCategory(int categoryNumber) {
         Category[] categories = Category.values();
